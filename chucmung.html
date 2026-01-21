@@ -14,7 +14,46 @@
             font-family: 'Arial', sans-serif;
             overflow: hidden;
             flex-direction: column;
+            background-color: #000; /* Để nền đen tránh lóa */
         }
+
+        /* --- 1. CODE CẢNH BÁO XOAY NGANG (MỚI THÊM) --- */
+        #rotate-warning {
+            display: none; /* Mặc định ẩn */
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #1a1a1a;
+            z-index: 99999; /* Luôn nằm trên cùng */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            text-align: center;
+        }
+
+        .phone-icon {
+            width: 50px; height: 80px;
+            border: 3px solid white;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            animation: rotate-anim 1.5s infinite ease-in-out;
+        }
+
+        @keyframes rotate-anim {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(90deg); }
+            100% { transform: rotate(90deg); }
+        }
+
+        /* Chỉ hiện khi màn hình dọc trên điện thoại/máy tính bảng */
+        @media only screen and (max-width: 1024px) and (orientation: portrait) {
+            #rotate-warning { display: flex; }
+            /* Ẩn nội dung chính đi */
+            .container, .instruction, .overlay, #bg-video { display: none !important; }
+        }
+
+        /* --- 2. CÁC PHẦN CŨ CỦA BẠN (GIỮ NGUYÊN) --- */
 
         /* --- VIDEO NỀN --- */
         #bg-video {
@@ -114,6 +153,11 @@
         <source src="mp3.mp3" type="audio/mpeg">
     </audio>
 
+    <div id="rotate-warning">
+        <div class="phone-icon"></div>
+        <h3>Vui lòng xoay ngang điện thoại<br>để xem món quà! 🎁</h3>
+    </div>
+
     <div class="overlay"></div>
 
     <div class="container" onclick="toggleGift()">
@@ -142,7 +186,7 @@
             
             if (container.classList.contains('open')) {
                 // KHI MỞ:
-                textGuide.innerText = "";
+                textGuide.innerText = ""; // Bạn đang để trống chữ khi mở
                 textGuide.style.opacity = '0.6';
                 
                 // Bắt đầu phát nhạc
@@ -152,10 +196,10 @@
 
             } else {
                 // KHI ĐÓNG:
-                textGuide.innerText = "";
+                textGuide.innerText = ""; // Bạn đang để trống chữ khi đóng
                 textGuide.style.opacity = '1';
 
-                // Tạm dừng nhạc (Nếu bạn muốn đóng lại vẫn hát thì xóa dòng dưới đi)
+                // Tạm dừng nhạc
                 audio.pause();
             }
         }
@@ -163,8 +207,3 @@
 
 </body>
 </html>
-
-
-
-
-
