@@ -40,7 +40,7 @@
         }
         
         body.open-active .overlay {
-            background: rgba(0, 0, 0, 0.85); /* Nền tối hẳn đi */
+            background: rgba(0, 0, 0, 0.85);
         }
 
         /* --- CONTAINER (KHUNG CHỨA) --- */
@@ -49,7 +49,6 @@
             width: 660px;
             height: 440px;
             cursor: pointer;
-            /* Hiệu ứng phóng to mượt trong 0.8 giây */
             transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
             z-index: 10;
         }
@@ -70,38 +69,26 @@
             transition: all 0.8s ease;
         }
 
-        /* Phong bì nằm trên (che thiệp) */
-        .envelope { 
-            z-index: 2; 
-        }
-        
-        /* Thiệp nằm dưới */
-        .card { 
-            z-index: 1; 
-        }
+        .envelope { z-index: 2; }
+        .card { z-index: 1; }
 
         /* --- TRẠNG THÁI KHI MỞ --- */
-        
-        /* 1. Phóng to toàn bộ khung chứa lên gấp 2.2 lần */
         .container.open {
             transform: scale(1.2); 
-            cursor: default; /* Mất con trỏ tay */
+            cursor: default;
         }
 
-        /* 2. Phong bì: Biến mất (Tan biến) */
         .container.open .envelope {
-            opacity: 0; /* Trong suốt hoàn toàn */
-            transform: scale(1.2); /* Phóng to nhẹ rồi biến mất (hiệu ứng nổ) */
-            pointer-events: none; /* Không còn bấm được nữa */
+            opacity: 0;
+            transform: scale(1.2);
+            pointer-events: none;
         }
 
-        /* 3. Thiệp: Hiện nguyên hình */
         .container.open .card {
             z-index: 10;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8); /* Bóng đậm cho nổi */
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
         }
 
-        /* Chữ hướng dẫn */
         .instruction {
             position: absolute;
             bottom: 15%;
@@ -123,10 +110,13 @@
         <source src="https://static.videezy.com/system/resources/previews/000/050/374/original/Blue_Particles_Background_Loop.mp4" type="video/mp4">
     </video>
 
+    <audio id="my-music" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
     <div class="overlay"></div>
 
     <div class="container" onclick="toggleGift()">
-        
         <img class="card" 
              src="thiep.png" 
              alt="Thiệp chúc mừng">
@@ -136,7 +126,7 @@
              alt="Phong bì">
     </div>
 
-    <div class="instruction" id="text-guide">Nhấn vào phong bì để mở nhé! ❤️</div>
+    <div class="instruction" id="text-guide">Nhấn vào phong bì để mở nhé!</div>
 
     <script>
         function toggleGift() {
@@ -144,21 +134,32 @@
             const textGuide = document.getElementById('text-guide');
             const body = document.body;
             
+            // Lấy thẻ nhạc ra để điều khiển
+            const audio = document.getElementById("my-music");
+
             container.classList.toggle('open');
             body.classList.toggle('open-active');
             
             if (container.classList.contains('open')) {
-                // Khi mở ra
+                // KHI MỞ:
                 textGuide.innerText = "Chạm vào ảnh để đóng lại";
                 textGuide.style.opacity = '0.6';
+                
+                // Bắt đầu phát nhạc
+                audio.play().catch(error => {
+                    console.log("Trình duyệt chặn phát nhạc tự động: " + error);
+                });
+
             } else {
-                // Khi đóng lại
+                // KHI ĐÓNG:
                 textGuide.innerText = "Nhấn vào phong bì để mở nhé! ❤️";
                 textGuide.style.opacity = '1';
+
+                // Tạm dừng nhạc (Nếu bạn muốn đóng lại vẫn hát thì xóa dòng dưới đi)
+                audio.pause();
             }
         }
     </script>
 
 </body>
 </html>
-
